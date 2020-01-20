@@ -49,7 +49,7 @@ public class Filer {
     public boolean doesFileExist(String fp){
         File file = new File(fp);
         if(file.isFile()){//Check if file is there and is a file and not a directory
-            System.out.println("File exists");
+            //System.out.println("File exists");
             return true;
         }else{
             System.err.println("ERROR: File does not exist");
