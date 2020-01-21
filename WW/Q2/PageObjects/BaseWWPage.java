@@ -36,7 +36,7 @@ public class BaseWWPage {
     private WebDriver driver;
     private String website = "https://www.weightwatchers.com/us/";
     private By findAStudioButton = By.className("find-a-meeting");
-    private String expectedPageTitle= "WW (Weight Watchers): Weight Loss & Wellness Help";
+    private String expectedPageTitle = "WW (Weight Watchers): Weight Loss & Wellness Help";
 
     /**
      * Constructor
@@ -62,12 +62,16 @@ public class BaseWWPage {
         driver.get(site);
 
     }
+    public void quitDriver(WebDriver driver){
+        driver.quit();
+    }
+
 
     /**
      * Gets the page title
      * @return
      */
-    public String getPageTitle(){
+    public String getBasePageTitle(){
         return driver.getTitle();
     }
 
@@ -77,7 +81,7 @@ public class BaseWWPage {
      * @return
      */
     public boolean verifyBasePageTitle(String expectedPageTitle) {
-        String pageTitle = getPageTitle();
+        String pageTitle = getBasePageTitle();
         return pageTitle.contains(expectedPageTitle);
     }
 
@@ -92,15 +96,29 @@ public class BaseWWPage {
         return new FindAStudioPage(driver);
     }
 
+
+
+
     public static void main(String[] args) {
         WebDriver driver = new ChromeDriver();
-        BaseWWPage ww = new BaseWWPage(driver);
-        ww.LaunchDriver(ww.website);
+        //T1 launch driver to main page
+        BaseWWPage bp = new BaseWWPage(driver);
+        bp.LaunchDriver(bp.website);
+        //T2 verify page title is correct
+        bp.verifyBasePageTitle(bp.getBasePageTitle());
+        //T3 click find a studio btn
+        FindAStudioPage fp = bp.clickFindAStudioBtn();
+        //T4 verify page is correct title
+        fp.verifyFindAStudioPageTitle(fp.getFindAStudioPageTitle());
+        //T5 search for zip
+        SearchZipPage sp = fp.SearchZip();
 
-        ww.verifyBasePageTitle(ww.expectedPageTitle);
-        FindAStudioPage fp = ww.clickFindAStudioBtn();
+        //T6 verify page is correct title
 
-        driver.quit();
+        //T7
+
+        //End of Tests
+        bp.quitDriver(driver);
 
 
 
