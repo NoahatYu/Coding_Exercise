@@ -1,11 +1,16 @@
 package Q2.tests;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import Q2.PageObjects.BaseWWPage;
+import Q2.PageObjects.FindAStudioPage;
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
-public class BaseWWPageTest {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+public class BaseWWPageTest extends BaseTestSetup {
+    private BaseWWPage bp;
 
     /**
      * WebDriver driver = new ChromeDriver();
@@ -29,9 +34,25 @@ public class BaseWWPageTest {
      *         bp.quitDriver(driver);
      */
 
-
+    private WebDriver driver;
+    //private String website = "https://www.weightwatchers.com/us/";
+    @Parameters({ "site" })
+    @BeforeClass
+    public void setUp(String site) {
+        initTestBaseSetup(site);
+        driver = getDriver();
+    }
+    @Parameters({ "basePageTitle" })
     @Test
-    public void TestLaunchDriver(){
-
+    public void testBaseTitle(String basePageTitle) {
+        bp = new BaseWWPage(driver);
+        removePopUp();
+        Assert.assertTrue(bp.verifyBasePageTitle(basePageTitle),"WW page title doesn't match");
+    }
+    @Test
+    public void testStudioBtn(){
+        FindAStudioPage fsp = bp.clickFindAStudioBtn();
+        removePopUp();
+        Assert.assertNotNull(fsp);
     }
 }

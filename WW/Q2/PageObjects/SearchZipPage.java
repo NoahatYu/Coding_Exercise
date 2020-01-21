@@ -10,9 +10,19 @@ public class SearchZipPage {
     private WebDriver driver;
     private By locationDistance = By.className("location__distance");
     private By wwStudioLocations = By.className("meeting-location");
+    private String studioDistance;
+    private String studioTitle;
 
     public SearchZipPage(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public String getStudioDistance() {
+        return studioDistance;
+    }
+
+    public String getStudioTitle() {
+        return studioTitle;
     }
 
     public String getSearchZipPageTitle() {
@@ -39,14 +49,18 @@ public class SearchZipPage {
          * Prints the title of the first result(WW Studio) and the distance
          * (located on the right of location title/name) of it already searched by zip
          */
-        System.out.println("WW Studio Location: " + wwStudioElement.getText());
-        System.out.println("WW Studio Distance: " + wwStudioDistance.getText());
+        studioDistance = wwStudioDistance.getText();
+        studioTitle = wwStudioElement.getText().split("\n")[0];
+
+        System.out.println("WW Studio Location: " + studioTitle);
+        System.out.println("WW Studio Distance: " + studioDistance);
 
         System.out.println("Clicking First WW Studio: ");
         if(wwStudioElement.isDisplayed() || wwStudioElement.isEnabled()){
             wwStudioElement.click();
         } else {
             System.err.println("ERROR: Element not found");
+            return null;
         }
         return new WWStudioPage(driver);
     }

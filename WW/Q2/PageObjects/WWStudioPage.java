@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class WWStudioPage {
 
@@ -40,16 +41,30 @@ public class WWStudioPage {
         return getLocalName().contains(expectedLocalName);
 
     }
-
+    /**
+     * Helper class to remove WW popup that could mess up the Q2.tests
+     */
+    private void removePopUp(){
+        WebElement popUp = driver.findElement(By.className("bx-wrap"));
+        WebElement popUpCloseBtn = driver.findElement(By.id("bx-close-inside-1110060"));
+        if(popUp.isDisplayed() ){
+            popUpCloseBtn.click();
+        }
+    }
     /**
      * From this location page, print TODAY’s hours of operation (located towards the bottom of the page)
      */
-    public void printHrsOfOp(){
+    public String printHrsOfOp(){
         List<WebElement> hrsOfOpElements = driver.findElements(hrsOfOp);
         System.out.println("Hours Of Operation:");
+        StringBuilder stringBuilder = new StringBuilder();
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //removePopUp();
         for (WebElement e : hrsOfOpElements) {
             System.out.println(e.getText());
+            stringBuilder.append(e.getText() +"\n");
         }
+        return stringBuilder.toString();
 
     }
     /**
@@ -57,7 +72,7 @@ public class WWStudioPage {
      * has a particular day of the week
      * @param dayOfWeek
      */
-    public void printMeetings(String dayOfWeek){
+    public String printMeetings(String dayOfWeek){
         HashMap<String,Integer> meetingsMap = new HashMap<>();
         List<WebElement> dailyLst = driver.findElements(dailySchedule);
         for(WebElement day : dailyLst){
@@ -77,36 +92,14 @@ public class WWStudioPage {
             }
 
         }
+        StringBuilder sb = new StringBuilder();
         //Java 8 lambda to print out key and values of map
         System.out.println("Meetings for " + dayOfWeek + ":");
         meetingsMap.forEach((k,v) -> {
+            sb.append(k + " " + v + "\n");
             System.out.println(k + " " + v);
         });
-
-    }
-    /**
-     * Helper class to remove WW popup that could mess up the Q2.tests
-     */
-    public void removePopUp(){
-        WebElement popUp = driver.findElement(By.id("bx-creative-1106064"));
-        if(popUp.isEnabled() ){
-            WebElement popUpCloseBtn = driver.findElement(By.className("bx-close-x-adaptive-1"));
-            popUpCloseBtn.click();
-        }
-    }
-    public static void main(String[] args) {
-        WebDriver driver = new ChromeDriver();
-        BaseWWPage bp = new BaseWWPage(driver);
-        bp.LaunchDriver("https://www.weightwatchers.com/us/find-a-meeting/1180510/ww-studio-flatiron-new-york-ny");
-
-        WWStudioPage qq = new WWStudioPage(driver);
-        qq.removePopUp();
-        System.out.println(qq.verifyLocationName(qq.expectedLocalName));
-        qq.printHrsOfOp();
-        qq.printMeetings("Mon");
-
-        driver.quit();
-
+        return sb.toString();
 
     }
 

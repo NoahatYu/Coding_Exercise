@@ -11,7 +11,6 @@ public class FindAStudioPage {
     private String zipCode = "10011";
     private By zipTextBox = By.id("meetingSearch");
     private By zipSearchBtn = By.className("btn spice-translated");
-    private String expectedTitle = "Find WW Studios & Meetings Near You | WW USA";
 
     public FindAStudioPage(WebDriver driver) {
         this.driver = driver;
@@ -26,7 +25,8 @@ public class FindAStudioPage {
      * @return true if so and false if not
      */
     public boolean verifyFindAStudioPageTitle(String expectedTitle) {
-        return getFindAStudioPageTitle().contains(expectedTitle);
+        System.out.println(getFindAStudioPageTitle());
+        return getFindAStudioPageTitle().equals(expectedTitle);
     }
 
 
@@ -45,14 +45,15 @@ public class FindAStudioPage {
      * Search for WW studios with given zip
      * @return
      */
-    public SearchZipPage SearchZip() {
+    public SearchZipPage searchZip() {
         System.out.println("Searching for zip: ");
         enterZip();
-        WebElement zipSearchBtnElement = driver.findElement(zipSearchBtn);
+        WebElement zipSearchBtnElement = driver.findElement(zipTextBox);
         if(zipSearchBtnElement.isDisplayed() || zipSearchBtnElement.isEnabled()){
-            zipSearchBtnElement.click();
+            zipSearchBtnElement.sendKeys(Keys.ENTER);
        } else {
             System.err.println("ERROR: Element not found");
+            return null;
         }
         return new SearchZipPage(driver);
     }

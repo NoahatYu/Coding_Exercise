@@ -34,9 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BaseWWPage {
     private WebDriver driver;
-    private String website = "https://www.weightwatchers.com/us/";
     private By findAStudioButton = By.className("find-a-meeting");
-    private String expectedPageTitle = "WW (Weight Watchers): Weight Loss & Wellness Help";
 
     /**
      * Constructor
@@ -44,7 +42,6 @@ public class BaseWWPage {
     public BaseWWPage(WebDriver driver){
         this.driver = driver;
     }
-
 
     /**
      * Gets the page title
@@ -56,7 +53,6 @@ public class BaseWWPage {
 
     /**
      * Verify loaded page title matches "WW (Weight Watchers): Weight Loss & Wellness Help"
-     * @param expectedPageTitle
      * @return
      */
     public boolean verifyBasePageTitle(String expectedPageTitle) {
@@ -71,6 +67,7 @@ public class BaseWWPage {
             findAStudioBtnElement.click();
         else {
             System.err.println("ERROR: Element not found");
+            return null;
         }
         return new FindAStudioPage(driver);
     }
