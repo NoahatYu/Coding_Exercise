@@ -47,27 +47,6 @@ public class BaseWWPage {
 
 
     /**
-     * Launch Driver and Navigate to https://www.weightwatchers.com/us/
-     * @param site website
-     * @return WebDriver
-     */
-    public void LaunchDriver(String site){
-        //setting the driver executable
-        System.setProperty("webdriver.chrome.driver", "./chromedriver");
-        //Applied wait time
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        //maximize window
-        driver.manage().window().maximize();
-        //open browser with desired URL
-        driver.get(site);
-
-    }
-    public void quitDriver(WebDriver driver){
-        driver.quit();
-    }
-
-
-    /**
      * Gets the page title
      * @return
      */
@@ -96,33 +75,4 @@ public class BaseWWPage {
         return new FindAStudioPage(driver);
     }
 
-
-
-
-    public static void main(String[] args) {
-        WebDriver driver = new ChromeDriver();
-        //T1 launch driver to main page
-        BaseWWPage bp = new BaseWWPage(driver);
-        bp.LaunchDriver(bp.website);
-        //T2 verify page title is correct
-        bp.verifyBasePageTitle(bp.getBasePageTitle());
-        //T3 click find a studio btn
-        FindAStudioPage fp = bp.clickFindAStudioBtn();
-        //T4 verify page is correct title
-        fp.verifyFindAStudioPageTitle(fp.getFindAStudioPageTitle());
-        //T5 search for zip
-        SearchZipPage sp = fp.SearchZip();
-
-        //T6 verify page is correct title
-
-        //T7
-
-        //End of Tests
-        bp.quitDriver(driver);
-
-
-
-
-
-    }
 }
